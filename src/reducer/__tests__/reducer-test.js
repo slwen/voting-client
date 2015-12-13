@@ -65,9 +65,10 @@ describe('reducer', () => {
     }))
   })
 
-  it('handles VOTE by setting hasVoted', () => {
+  it('handles VOTE by setting myVote', () => {
     const state = fromJS({
       vote: {
+        round: 50,
         pair: ['Judas Priest', 'Black Sabbath'],
         tally: { 'Judas Priest': 1 }
       }
@@ -77,16 +78,21 @@ describe('reducer', () => {
 
     expect(nextState).to.equal(fromJS({
       vote: {
+        round: 50,
         pair: ['Judas Priest', 'Black Sabbath'],
         tally: { 'Judas Priest': 1 }
       },
-      hasVoted: 'Judas Priest'
+      myVote: {
+        round: 50,
+        entry: 'Judas Priest'
+      }
     }))
   })
 
-  it('does not set hasVoted for VOTE on invalid entry', () => {
+  it('does not set myVote for VOTE on invalid entry', () => {
     const state = fromJS({
       vote: {
+        round: 20,
         pair: ['Judas Priest', 'Black Sabbath'],
         tally: { 'Judas Priest': 1 }
       }
@@ -96,24 +102,30 @@ describe('reducer', () => {
 
     expect(nextState).to.equal(fromJS({
       vote: {
+        round: 20,
         pair: ['Judas Priest', 'Black Sabbath'],
         tally: { 'Judas Priest': 1 }
       }
     }))
   })
 
-  it('removes hasVoted on SET_STATE if pair changes', () => {
+  it('removes myVote on SET_STATE if round changes', () => {
     const initialState = fromJS({
       vote: {
+        round: 6,
         pair: ['Judas Priest', 'Black Sabbath'],
         tally: { 'Judas Priest': 1 }
       },
-      hasVoted: 'Judas Priest'
+      myVote: {
+        round: 6,
+        entry: 'Judas Priest'
+      }
     });
     const action = {
       type: 'SET_STATE',
       state: {
         vote: {
+          round: 7,
           pair: ['Iron Maiden', 'Accept']
         }
       }
@@ -122,6 +134,7 @@ describe('reducer', () => {
 
     expect(nextState).to.equal(fromJS({
       vote: {
+        round: 7,
         pair: ['Iron Maiden', 'Accept']
       }
     }));
